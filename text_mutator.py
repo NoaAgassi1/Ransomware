@@ -1,8 +1,6 @@
 import random
 from pathlib import Path
 from cryptography.fernet import Fernet
-#from Crypto.Cipher import AES, DES
-#from Crypto.Random import get_random_bytes
 
 class TextMutationTests:
     def __init__(self, folder: str):
@@ -69,27 +67,6 @@ class TextMutationTests:
             file.write_bytes(encrypted)
             print(f"[MUTATE] Fernet encryption applied to {file.name}")
 
-    # def encrypt_with_aes(self):
-    #     key = get_random_bytes(16)
-    #     cipher = AES.new(key, AES.MODE_EAX)
-    #     selected_files = random.sample(self.target_files, min(1, len(self.target_files)))
-    #     for file in selected_files:
-    #         data = file.read_bytes()
-    #         ciphertext, tag = cipher.encrypt_and_digest(data)
-    #         with file.open('wb') as f:
-    #             f.write(cipher.nonce + tag + ciphertext)
-    #         print(f"[MUTATE] AES encryption applied to {file.name}")
-
-    # def encrypt_with_des(self):
-    #     key = get_random_bytes(8)
-    #     cipher = DES.new(key, DES.MODE_ECB)
-    #     selected_files = random.sample(self.target_files, min(1, len(self.target_files)))
-    #     for file in selected_files:
-    #         data = file.read_bytes()
-    #         padded = data + b' ' * (8 - len(data) % 8)
-    #         encrypted = cipher.encrypt(padded)
-    #         file.write_bytes(encrypted)
-    #         print(f"[MUTATE] DES encryption applied to {file.name}")
 
     def run_all(self):
         self.corrupt_to_non_ascii()
@@ -97,5 +74,5 @@ class TextMutationTests:
         self.reverse_and_scramble()
         self.scramble_one_line()
         self.encrypt_with_fernet()
-        # self.encrypt_with_aes()
-        # self.encrypt_with_des()
+    
+
