@@ -96,6 +96,12 @@ METADATA_FILE = "baseline.json"
 * No periodic polling: uses inotify (Linux) / FSEvents (macOS) / ReadDirectoryChangesW (Windows)
 
 ---
+**How To Run**
+  cd <209280635_318901527>
+  python -m pip install watchdog blake3
+  Python .\guard.py .\<"folder to watch">\v
+
+---
 
 ## 🔍 n‑gram & Jaccard Explanation
 
@@ -112,5 +118,6 @@ METADATA_FILE = "baseline.json"
 * [blake3](https://pypi.org/project/blake3/) for fast checksums
 
 ---
+
 
 
