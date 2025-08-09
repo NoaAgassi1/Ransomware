@@ -1,0 +1,12 @@
+Sensor reading 0: 21.93C
+Sensor reading 1: 24.36C
+Sensor reading 2: 29.58C
+Sensor reading 3: 23.63C
+Sensor reading 4: 28.39C
+Sensor reading 5: 29.31C
+Sensor reading 6: 23.08C
+Sensor reading 7: 27.27C
+Sensor reading 8: 23.19C
+Sensor reading 9: 26.50C
+Sensor reading 9: 26.50C
+
