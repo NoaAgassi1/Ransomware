@@ -1,82 +1,3 @@
-"""
-# Ransomware Protection Guard Script
-# ------------------------------------
-
-## General Description:
-A script that monitors a folder in real time to detect suspicious ransomware activity.
-It combines several algorithms and checks to capture abnormal changes in file contents.
-Our algorithm uses Watchdog, which triggers when a file is modified or a new file is added.
-This avoids polling: each file is checked immediately upon change.
-An alert is triggered when:
-- Unusual behavior is detected (e.g., word-order reversal, irrelevant content insertion).
-- Encryption is detected (full-file or partial, e.g. a single encrypted sentence).
-
-**Workflow**:
-1. Initial scan of all `.txt` files → build JSON state (history + latest).
-2. Create honeypot files if missing.
-3. Continuous monitoring via Watchdog (`on_created`/`on_modified` → `_process()`):
-   - Skip hidden/temp files (. prefix, ~ suffix).
-   - Burst detection: if ≥ BURST_THRESHOLD events in BURST_WINDOW_SEC,
-     alert and still check the files that changed.
-   - Content analysis (single pass):
-        -Quick "mtime" check if unchanged → skip.
-        -Extension check → non‑.txt → alert.
-        -Compute metrics as in initial scan.
-        -Compare vs previous:
-            -Printable ratio drop
-            -Checksum change + entropy increase
-            -n‑gram Jaccard similarity drop
-   - Update JSON and raise alerts on anomalies.
-    Append new profiles and update latest.
-    Print [ALERT] path → reason on anomalies.
-
-4. On termination (KeyboardInterrupt) → save the updated baseline to JSON.
-
-**Complexity Analysis**:
-
-a. **Memory Usage** – O(n)
-   The system stores metadata per file: checksum, entropy,mtime,timestamps, n-gram summary,and size.
-   It does **not** store full file contents.
-   Therefore, memory usage grows linearly with the number of files.
-
-b. **Runtime Complexity** – O(n * m)
-   One full scan processes all `.txt` files in the target directory.
-   Each file is read and analyzed linearly based on its size (`m` = average file size in KB).
-   Thus, the total runtime for a full scan is O(n * m).
-   In real-time monitoring, each individual file event is handled in O(m).
-
-c. **I/O Complexity** – Low
-   The system uses OS-level filesystem events (e.g., inotify, FSEvents via `watchdog`).
-   Files are only read when they are created or modified.
-   There is no polling or periodic scanning, so disk I/O is minimal.
-
----
-
-**Detailed Timing Estimates (Generalized)**
-
-- **Initial Full Scan**: O(M * m)
-  Reads and analyzes M files, each of size m. Metrics (entropy, n-grams, Jaccard) are all linear in the file size.
-
-- **Background Check – No Change**: O(M)
-  Checks metadata (`mtime`) for M files with constant-time operations per file.
-
-- **Background Check – Minor Change**: O(m)
-  Reads one file of size m and computes lightweight metrics (entropy/hash), skipping heavy analysis (n-grams, Jaccard) for small changes.
-
-- **Background Check – Significant Change**: O(m)
-  Reads one file and performs full analysis including n-gram profile building and Jaccard computation—both linear in the file size.
-
-- **Non-TXT File Event**: O(1)
-  Simple extension check without any file reading.
-
-
-**How To Run**
-  cd <209280635_318901527>
-  python -m pip install watchdog blake3
-  Python .\guard.py .\<"folder to watch">\
-
-"""
-
 
 import math
 import json
@@ -421,4 +342,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lightweight ransomware guard with history and honeypots")
     parser.add_argument("folder", help="Folder to monitor")
     args = parser.parse_args()
+
     main(args.folder)
