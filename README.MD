@@ -12,7 +12,8 @@ A lightweight Python script that monitors a folder in real time to detect suspic
 
 cd <209280635_318901527>
 python -m pip install watchdog blake3
-Python .\guard.py .\<"folder to watch">\
+Python .\guard.py .\test_text_files\
+python .\run_mutation.py
 
 ```
 
@@ -115,6 +116,7 @@ METADATA_FILE = "baseline.json"
 * [blake3](https://pypi.org/project/blake3/) for fast checksums
 
 ---
+
 
 
 
